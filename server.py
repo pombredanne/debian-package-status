@@ -1,5 +1,7 @@
-# Server file for debian-package-status
-from http.server import HTTPServer, BaseHTTPRequestHandler
+# This is the HTTP server script for the debian-package-status project
+
+from http.server import HTTPServer, BaseHTTPRequestHandler     # Used to create HTTP web server
+from urllib.parse import urlparse                              # Used to parse url's
 import fileparser
 import htmlbuilder
 
@@ -7,15 +9,19 @@ import htmlbuilder
 status_file = 'status.real' # filepath to the /var/lib/dpkg/status file
 packages = fileparser.control_file_to_list(status_file)
 
-# sort packages alphabetically
+# Sort packages alphabetically
 packages_sorted = sorted(packages, key=lambda k: k['Package'])
 
-for x in packages_sorted:
-    print(x)
+# Extract package names to list
+package_names = []
+for dict in packages_sorted:
+    package_names.append(dict['Package'])
 
-packages_list_HTML = htmlbuilder.list_dict_to_HTML_list(packages_sorted, 'Package')
-page_HTML = htmlbuilder.buildHTMLPage('Debian Package Status', packages_list_HTML)
-print(page_HTML)
+# Convert list to HTML for index page
+packages_list_HTML = htmlbuilder.list_to_HTML_list(package_names, link = True)
+index_HTML = htmlbuilder.buildHTMLPage(title = 'Debian Package Status', body = packages_list_HTML)
+
+page_HTML = ''
 
 class Serv(BaseHTTPRequestHandler):
 
@@ -23,22 +29,21 @@ class Serv(BaseHTTPRequestHandler):
         # root of website is index.html
         if self.path == '/':
             self.path = '/index.html'
+            page_HTML = index_HTML # We are at homepage
 
         # TODO: Generate HTML page for given package
         if self.path == '/packages':
+            print("Package page requested.")
             pass
 
         # Create index.html by reading in status.real
         # status.real is an example /var/lib/dpkg/status file from Github: https://gist.github.com/lauripiispanen/29735158335170c27297422a22b48caa
 
         try: # Build HTML to serve
-
-            #pageHTML = open('status.real', 'r').read()
-
             print(page_HTML)
             self.send_response(200)
         except:
-            f = "File not found"
+            page_HTML = "File not found"
             self.send_response(404)
 
         self.end_headers()

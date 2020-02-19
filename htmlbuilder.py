@@ -10,13 +10,27 @@ def buildHTMLPage(title='', body=''):
 
     return pageHTML
 
-# Converts a list of dicts to an HTML list for a given key
-# TODO: Make hyperlinks to descriptions in lists
-def list_dict_to_HTML_list(list_of_dicts, key):
-    strHTML = '<ol>\n'
-    for dict in list_of_dicts:
-        item = '\t<li>' + dict[key] + '</li>\n'
-        strHTML += item
-    strHTML += '</ol>'
+# Converts a list of strings to an HTML list
+# TODO: If using package name in url, test that package adheres to url syntax.
+def list_to_HTML_list(list, link=True):
 
-    return(strHTML)
+    list_HTML = ''
+    for str in list:
+        list_item = '<li>' + str + '</li>'
+
+        # Add hyperlink to list item
+        if link == True:
+            url = '/packages?name=' + str
+            list_item = '<a href=\"' + url + '\">' + list_item + '</a>'
+
+        list_HTML += '\t' + list_item + '\n'
+
+    if link == True:
+        list_HTML = '<ol>\n' + list_HTML + '</ol>'
+
+    return(list_HTML)
+
+
+# TODO: Converts a python dictionary to an HTML table
+def dict_to_HTML_table(dict):
+    pass
