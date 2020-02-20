@@ -10,12 +10,13 @@ website where the package information can be browsed.
 * <strike> Build Python web server </strike>
 * <strike> Parse [debian control file](https://www.debian.org/doc/debian-policy/ch-controlfields.html) (/var/lib/dpkg/status). </strike>
 * <strike> Display index page with list of packages alphabetically </strike>
-* When clicking on links, dynamically convert parsed data to new HTML page (Alternatively, generate pages upfront for every package)
-    * Display Name
-    * Display Description
-    * Display Package dependencies, ignoring versions
-    * Reverse dependencies (requires building a graph)
+* <strike> When clicking on links, dynamically convert parsed data to new HTML page (Alternatively, generate pages upfront for every package) </strike>
+    * <strike> Display Name </strike>
+    * <strike> Display Description </strike> Parse description newlines
+    * <strike> Display Package dependencies, ignoring versions </strike>
+    * <strike> Reverse dependencies (requires building a graph) </strike>
+    * Only link dependecies that exist in the list of packages (Don't allow broken links to non-installed pacakges)
 * Improve user experience with minimal but appealing CSS
 * Make project easily deployable (Docker image?)
 * Deploy on webserver
-* Create HTML validation function
+* Clean up Unit Tests for each module

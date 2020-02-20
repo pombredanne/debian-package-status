@@ -1,26 +1,29 @@
 # Package dependencies can be viewed as a graph
 # This module implements useful graph functions
 
+
 # Convert list of dictionaries to graph
-def list_of_dicts_to_graph(list_of_dicts):
+def list_of_dicts_to_graph(list_of_dicts, remove_version_number = True):
     graph = {} # dictionary where key is a vertex, values are adjacent vertices
 
     for dic in list_of_dicts:
         package_name = dic.get('Package', '')
         dependencies = dic.get('Depends','').split(', ')
 
-        # Remove version from dependencies
-        # Assumes version is given after package name, separated by a single space
-        temp_dependencies = []
-        for item in dependencies:
-            dependency = item.split(' ')[0]
-            temp_dependencies.append(dependency)
-        dependencies = temp_dependencies
-        dependencies = set(dependencies) # Treat dependencies as unique
+        if remove_version_number == True:
+            # Remove version from dependencies
+            # Assumes version is given after package name, separated by a single space
+            temp_dependencies = []
+            for item in dependencies:
+                dependency = item.split(' ')[0]
+                temp_dependencies.append(dependency)
+            dependencies = temp_dependencies
+        dependencies = set(dependencies) # Remove duplicates by temporarily converting list to set
 
         graph[package_name] = dependencies
 
-    return(graph)
+    return graph
+
 
 # Invert edge direction on a provided graph, where edges are one-directional
 # Graph is a dictionary where a key is a package name, and value is a set of dependencies
@@ -38,7 +41,7 @@ def invert_graph(graph):
             else: # Dependency exists in inverted_graph, add package to set
                 inverted_graph[dependency].add(package_name)
 
-    return(inverted_graph)
+    return inverted_graph
 
 # TODO Unit Tests (executed when script is run stand-alone)
 if (__name__ == '__main__'):
