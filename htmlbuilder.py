@@ -64,6 +64,6 @@ if (__name__ == '__main__'):
 
     # Extract package names to list
     package_names = []
-    for dict in packages_sorted:
-        package_names.append(dict['Package'])
-        dict_to_HTML(dict)
+    for dic in packages_sorted:
+        package_names.append(dic['Package'])
+        dict_to_HTML(dic)

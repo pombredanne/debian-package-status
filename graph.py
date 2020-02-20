@@ -5,10 +5,9 @@
 def list_of_dicts_to_graph(list_of_dicts):
     graph = {} # dictionary where key is a vertex, values are adjacent vertices
 
-    # TODO: Do not use dict as variable because it is a reserved keyword
-    for dict in list_of_dicts:
-        package_name = dict.get('Package', '')
-        dependencies = dict.get('Depends','').split(', ')
+    for dic in list_of_dicts:
+        package_name = dic.get('Package', '')
+        dependencies = dic.get('Depends','').split(', ')
 
         # Remove version from dependencies
         # Assumes version is given after package name, separated by a single space
