@@ -1,10 +1,11 @@
 # This is the HTTP server script for the debian-package-status project
 
 from http.server import HTTPServer, BaseHTTPRequestHandler     # Used to create HTTP web server
-from urllib.parse import urlparse                              # Used to parse url's
-import fileparser
-import htmlbuilder
+import fileparser                                              # Used to parse Debian control files
+import htmlbuilder                                             # Used to build HTML elements
 
+
+# Initialize website
 # Load and parse data that we want to serve
 status_file = 'status.real' # filepath to the /var/lib/dpkg/status file
 packages = fileparser.control_file_to_list(status_file)
@@ -21,29 +22,39 @@ for dict in packages_sorted:
 packages_list_HTML = htmlbuilder.list_to_HTML_list(package_names, link = True)
 index_HTML = htmlbuilder.buildHTMLPage(title = 'Debian Package Status', body = packages_list_HTML)
 
-page_HTML = ''
+page_HTML = None
+
 
 class Serv(BaseHTTPRequestHandler):
 
     def do_GET(self):
+
+        url_split = self.path.split('/')
+
         # root of website is index.html
         if self.path == '/':
             self.path = '/index.html'
             page_HTML = index_HTML # We are at homepage
+            self.send_response(200)
 
         # TODO: Generate HTML page for given package
-        if self.path == '/packages':
-            print("Package page requested.")
-            pass
+        if url_split[1] == 'packages':
+            print(f'Package page requested: {self.path}')
 
-        # Create index.html by reading in status.real
-        # status.real is an example /var/lib/dpkg/status file from Github: https://gist.github.com/lauripiispanen/29735158335170c27297422a22b48caa
+            # Lookup package in list of dicts
+            package = next((item for item in packages if item['Package'] == url_split[2]), None)
 
-        try: # Build HTML to serve
-            print(page_HTML)
-            self.send_response(200)
-        except:
-            page_HTML = "File not found"
+            if package == None: # package not found
+                page_HTML = None
+            else: # package found
+                print(package)
+                page_HTML = package # TODO: Convert dictionary to HTML table
+                self.send_response(200)
+
+
+        # Could not find requested page
+        if page_HTML == None:
+            page_HTML = "404: File not found"
             self.send_response(404)
 
         self.end_headers()

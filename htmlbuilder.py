@@ -20,7 +20,7 @@ def list_to_HTML_list(list, link=True):
 
         # Add hyperlink to list item
         if link == True:
-            url = '/packages?name=' + str
+            url = '/packages/' + str
             list_item = '<a href=\"' + url + '\">' + list_item + '</a>'
 
         list_HTML += '\t' + list_item + '\n'
@@ -31,6 +31,39 @@ def list_to_HTML_list(list, link=True):
     return(list_HTML)
 
 
-# TODO: Converts a python dictionary to an HTML table
-def dict_to_HTML_table(dict):
-    pass
+# TODO: Converts a python dictionary to HTML
+def dict_to_HTML(dict):
+    str_HTML = ''
+    header = dict.get('Package', '')
+    description = dict.get('Description', '')
+    dependencies = dict.get('Depends','').split(', ')
+
+    # Remove version from dependencies
+    temp_dependencies = []
+    for item in dependencies:
+        dependency = item.split(' ')[0]
+        temp_dependencies.append(dependency)
+    dependencies = temp_dependencies
+
+    print(f'Header: {header}')
+    #print(f'Description: {description}')
+    print(f'Dependencies: {dependencies}')
+
+    # TODO: Create graph of reverse packages
+
+
+# TODO Unit Tests (executed when script is run stand-alone)
+if (__name__ == '__main__'):
+    import fileparser
+    status_file = 'status.real' # filepath to the /var/lib/dpkg/status file
+    packages = fileparser.control_file_to_list(status_file)
+
+    # Sort packages alphabetically
+    packages_sorted = sorted(packages, key=lambda k: k['Package'])
+
+
+    # Extract package names to list
+    package_names = []
+    for dict in packages_sorted:
+        package_names.append(dict['Package'])
+        dict_to_HTML(dict)

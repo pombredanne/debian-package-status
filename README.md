@@ -11,6 +11,10 @@ website where the package information can be browsed.
 * <strike> Parse [debian control file](https://www.debian.org/doc/debian-policy/ch-controlfields.html) (/var/lib/dpkg/status). </strike>
 * <strike> Display index page with list of packages alphabetically </strike>
 * When clicking on links, dynamically convert parsed data to new HTML page (Alternatively, generate pages upfront for every package)
+    * Display Name
+    * Display Description
+    * Display Package dependencies, ignoring versions
+    * Reverse dependencies (requires building a graph)
 * Improve user experience with minimal but appealing CSS
 * Make project easily deployable (Docker image?)
 * Deploy on webserver
