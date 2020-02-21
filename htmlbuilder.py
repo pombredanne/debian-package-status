@@ -2,21 +2,27 @@ import fileparser
 
 # This function builds a complete HTML Page using the provided title and body parameters
 # The title and body parameters should be appropriately formatted HTML strings
-def build_html_page(title='', body=''):
+def build_html_page(title='', body='', css_path='/css/styles.css'):
 
     pageHTML = '<!DOCTYPE html><html>\n'
-    headHTML = '<head>\n\t<title>' + str(title) + '</title>\n<meta charset="UTF-8"></head>\n'
-    bodyHTML = '<body>\n' + str(body) + '\n</body>'
+    headHTML = '<head>\n\t' \
+               '<title>{}</title>\n' \
+               '<link rel=\"stylesheet\" href=\"{}\">' \
+               '<meta charset="UTF-8"></head>\n'.format(str(title), css_path)
+    bodyHTML = '<body>\n{}\n</body>'.format(str(body))
 
     pageHTML = pageHTML + headHTML + bodyHTML + '\n</html>' # finalize HTML
 
     return pageHTML
 
-def build_html_page(title='', body='', h1=''):
+def build_html_page(title='', body='', h1='', css_path='/css/styles.css'):
 
     pageHTML = '<!DOCTYPE html><html>\n'
-    headHTML = '<head>\n\t<title>' + str(title) + '</title>\n<meta charset="UTF-8"></head>\n'
-    bodyHTML = '<body>\n' + '<h1>' + h1 + '</h1>' + str(body) + '\n</body>'
+    headHTML = '<head>\n\t' \
+               '<title>{}</title>\n' \
+               '<link rel=\"stylesheet\" href=\"{}\">' \
+               '<meta charset="UTF-8"></head>\n'.format(str(title), css_path)
+    bodyHTML = '<body>\n<h1>{}</h1>{}\n</body>'.format(h1, str(body))
 
     pageHTML = pageHTML + headHTML + bodyHTML + '\n</html>' # finalize HTML
 
