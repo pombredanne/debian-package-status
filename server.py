@@ -11,8 +11,12 @@ from os import path
 status_file = 'status.real' # filepath to the /var/lib/dpkg/status file
 packages_raw = fileparser.control_file_to_list(status_file)
 packages = fileparser.clean_packages(packages_raw)      # remove unused fields and add reverse-dependency fields
-packages = sorted(packages, key=lambda k: k['Name']) # sort packages alphabetically
+packages = sorted(packages, key=lambda k: k['Name'])    # sort packages alphabetically
 package_names = fileparser.get_package_names(packages)
+
+# Create a set that we can reference so we don't have to iterate over the
+# list of dictionaries find if a package exists
+package_names_set = set(package_names)
 
 # Convert list of package names to HTML list to use on website homepage
 packages_list_HTML = htmlbuilder.list_to_html_list(package_names,  add_hyperlink=True)
@@ -84,7 +88,7 @@ class Serv(BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(bytes(page_data, 'utf-8'))
 
-
+# TODO: Fix multiple connection issues. Use threading!
 
 # Start server
 server_address = ('192.168.1.21', 80)

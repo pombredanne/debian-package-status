@@ -1,15 +1,16 @@
 import fileparser
 
+# TODO: Do not use .format() in format strings, use f'{}' instead
 # This function builds a complete HTML Page using the provided title and body parameters
 # The title and body parameters should be appropriately formatted HTML strings
 def build_html_page(title='', body='', css_path='/css/styles.css'):
 
     pageHTML = '<!DOCTYPE html><html>\n'
     headHTML = '<head>\n\t' \
-               '<title>{}</title>\n' \
-               '<link rel=\"stylesheet\" href=\"{}\">' \
-               '<meta charset="UTF-8"></head>\n'.format(str(title), css_path)
-    bodyHTML = '<body>\n{}\n</body>'.format(str(body))
+               f'<title>{title}</title>\n' \
+               f'<link rel=\"stylesheet\" href=\"{css_path}\">' \
+               '<meta charset="UTF-8"></head>\n'
+    bodyHTML = f'<body>\n{str(body)}\n</body>'
 
     pageHTML = pageHTML + headHTML + bodyHTML + '\n</html>' # finalize HTML
 
@@ -19,10 +20,10 @@ def build_html_page(title='', body='', h1='', css_path='/css/styles.css'):
 
     pageHTML = '<!DOCTYPE html><html>\n'
     headHTML = '<head>\n\t' \
-               '<title>{}</title>\n' \
-               '<link rel=\"stylesheet\" href=\"{}\">' \
-               '<meta charset="UTF-8"></head>\n'.format(str(title), css_path)
-    bodyHTML = '<body>\n<h1>{}</h1>{}\n</body>'.format(h1, str(body))
+               f'<title>{title}</title>\n' \
+               f'<link rel=\"stylesheet\" href=\"{css_path}\">' \
+               '<meta charset="UTF-8"></head>\n'
+    bodyHTML = f'<body>\n<h1>{h1}</h1>{str(body)}\n</body>'
 
     pageHTML = pageHTML + headHTML + bodyHTML + '\n</html>' # finalize HTML
 
@@ -38,20 +39,20 @@ def list_to_html_list(package_list, add_hyperlink=True, ordered=True):
     if package_list == {''}:
         return list_html
 
-    for str in package_list:
-        list_item = '<li>' + str + '</li>'
+    for package_name in package_list:
+        list_item = f'<li>{package_name}</li>'
 
         # Add hyperlink to list item
         if add_hyperlink:
-            url = '/packages/' + str
-            list_item = '<a href=\"' + url + '\">' + list_item + '</a>'
+            url = f'/packages/{package_name}'
+            list_item = f'<a href=\"{url}\">{list_item}</a>'
 
-        list_html += '\t' + list_item + '\n'
+        list_html += f'\t{list_item}\n'
 
     if ordered:
-        list_html = '<ol>\n' + list_html + '</ol>'
+        list_html = f'<ol>\n{list_html}</ol>'
     else:
-        list_html = '<ul>\n' + list_html + '</ul>'
+        list_html = f'<ul>\n{list_html}</ul>'
 
     return list_html
 
@@ -66,6 +67,7 @@ def dict_to_html(dict):
     reverse_dependencies = dict.get('Reverse-Dependencies','')
 
     # Build HTML page from data
+    # TODO: Some dependencies aren't install on the system, so only add links to packages that exist
     header_html = '<h1>Package: {}</h1>'.format(header)
     description_html = '<h2>Description:</h2>' \
                        '<p>{}</p>'.format(description)
@@ -91,7 +93,7 @@ if (__name__ == '__main__'):
 
     # Convert list of package names to HTML list to use on website homepage
     packages_list_HTML = list_to_html_list(package_names, add_hyperlink=True)
-    #print(packages_list_HTML)
+    print(packages_list_HTML)
 
     for package in packages:
         package_html = dict_to_html(package)
@@ -99,4 +101,4 @@ if (__name__ == '__main__'):
 
     zliblg = fileparser.find_package(packages, 'zlib1g')
     zliblg_html = dict_to_html(zliblg)
-    print(zliblg_html)
+    #print(zliblg_html)
