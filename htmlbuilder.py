@@ -1,4 +1,3 @@
-import fileparser
 import dpkg      # Used to access global set of packages installed on system
 
 # This function builds a complete HTML Page using the provided title and body parameters

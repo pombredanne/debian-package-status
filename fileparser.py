@@ -1,4 +1,3 @@
-import sys
 import graph
 
 # Convert Debian control file to a list of dictionaries

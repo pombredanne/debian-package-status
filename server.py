@@ -1,9 +1,7 @@
 # This is the HTTP server script for the debian-package-status project
 
 from http.server import HTTPServer, BaseHTTPRequestHandler     # Used to create HTTP web server
-import fileparser                                              # Used to parse Debian control files
 import htmlbuilder                                             # Used to build HTML elements
-import graph                                                   # Used to generate reverse dependencies
 from os import path
 import dpkg
 
