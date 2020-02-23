@@ -1,6 +1,5 @@
 import fileparser
 
-# TODO: Do not use .format() in format strings, use f'{}' instead
 # This function builds a complete HTML Page using the provided title and body parameters
 # The title and body parameters should be appropriately formatted HTML strings
 def build_html_page(title='', body='', css_path='/css/styles.css'):
@@ -62,7 +61,7 @@ def dict_to_html(dict):
 
     # Pull data from dictionary
     header = dict.get('Name', '')
-    description = dict.get('Description', '') # TODO: Convert \n to <br> for newlines
+    description = dict.get('Description', '')
     description = description.replace('\n', '<br />') # Replace newlines with HTML line break
     dependencies = dict.get('Dependencies','')
     reverse_dependencies = dict.get('Reverse-Dependencies','')
