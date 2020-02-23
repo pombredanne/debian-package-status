@@ -11,7 +11,6 @@ def control_file_to_list(filepath):
     with open(filepath, encoding='utf-8') as f:
         paragraph = {} # Treat each paragraph as a Python dictionary
         key = ''
-        value = ''
 
         for line in f:
 
@@ -75,10 +74,3 @@ def get_package_names(packages):
         package_names.append(package_name)
 
     return package_names
-
-# Finds the first package in a list of packages with the given name and returns it
-def find_package(package_list, name):
-    for dic in package_list:
-        print(dic.get('Name'))
-        if dic.get('Name') == name:
-            return dic

@@ -52,4 +52,5 @@ if (__name__ == '__main__'):
     dependency_graph = list_of_dicts_to_graph(packages)
     reverse_dependency_graph = invert_graph(dependency_graph)
 
+    print('If true result then double inverted graph equals original graph:')
     print(dependency_graph == invert_graph(reverse_dependency_graph))

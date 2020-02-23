@@ -5,21 +5,10 @@ import fileparser                                              # Used to parse D
 import htmlbuilder                                             # Used to build HTML elements
 import graph                                                   # Used to generate reverse dependencies
 from os import path
-
-# Initialize website
-# Load and parse data that we want to serve
-status_file = 'status.real' # filepath to the /var/lib/dpkg/status file
-packages_raw = fileparser.control_file_to_list(status_file)
-packages = fileparser.clean_packages(packages_raw)      # remove unused fields and add reverse-dependency fields
-packages = sorted(packages, key=lambda k: k['Name'])    # sort packages alphabetically
-package_names = fileparser.get_package_names(packages)
-
-# Create a set that we can reference so we don't have to iterate over the
-# list of dictionaries find if a package exists
-package_names_set = set(package_names)
+import dpkg
 
 # Convert list of package names to HTML list to use on website homepage
-packages_list_HTML = htmlbuilder.list_to_html_list(package_names,  add_hyperlink=True)
+packages_list_HTML = htmlbuilder.list_to_html_list(dpkg.package_names,  add_hyperlink=True)
 index_html = htmlbuilder.build_html_page(title = 'Debian Packages',
                                          body = packages_list_HTML,
                                          h1 = 'Debian Packages (/var/lib/dpkg/status)')
@@ -63,14 +52,14 @@ class Serv(BaseHTTPRequestHandler):
                 self.send_error(404)
 
         # TODO: http://localhost:8080/packages/whiptail-provider does not work
-        # TODO: Only link reverse-dependencies and dependencies that exist in packages
+
         # Handle requests for pages about specific dpkg packages
         if url_split[1] == 'packages' and len(url_split) > 2:
             print(f'Package page requested: {self.path}')
-            print(packages)
+            print(dpkg.packages)
 
             # Lookup package in list of dicts
-            package = next((item for item in packages if item['Name'] == url_split[2]), None)
+            package = next((item for item in dpkg.packages if item['Name'] == url_split[2]), None)
 
             if package == None: # package not found
                 page_data = None

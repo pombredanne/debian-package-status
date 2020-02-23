@@ -1,4 +1,5 @@
 import fileparser
+import dpkg      # Used to access global set of packages installed on system
 
 # This function builds a complete HTML Page using the provided title and body parameters
 # The title and body parameters should be appropriately formatted HTML strings
@@ -42,7 +43,9 @@ def list_to_html_list(package_list, add_hyperlink=True, ordered=True):
         list_item = f'<li>{package_name}</li>'
 
         # Add hyperlink to list item
-        if add_hyperlink:
+        # Only link reverse-dependencies and dependencies that exist in packages
+        # For example: plymouth package has dependency upstart-job that isn't listed in status.real dpkg/status file
+        if add_hyperlink and package_name in dpkg.package_names_set:
             url = f'/packages/{package_name}'
             list_item = f'<a href=\"{url}\">{list_item}</a>'
 
@@ -56,7 +59,7 @@ def list_to_html_list(package_list, add_hyperlink=True, ordered=True):
     return list_html
 
 
-# Converts a python dictionary to HTML webpage
+# Converts a python dictionary to an HTML webpage
 def dict_to_html(dict):
 
     # Pull data from dictionary
@@ -68,10 +71,13 @@ def dict_to_html(dict):
     dependencies_html = list_to_html_list(dependencies, ordered=False)
     reverse_dependencies_html = list_to_html_list(reverse_dependencies, ordered=False)
 
-    # Build HTML page from data
-    # TODO: Some dependencies aren't install on the system, so only add links to packages that exist
+    # If no dependency or reverse dependencies exist, then display 'None' instead of whitespace.
+    if reverse_dependencies == '':
+        reverse_dependencies_html = 'None'
+    if dependencies_html == '':
+        dependencies_html = 'None'
 
-    # Add html headers to data
+    # Add HTML headers to data
     home_link_html = f'<a href=\"/\"><h1>Debian Packages (/var/lib/dpkg/status)</h1></a>' # Create link to homepage
     header_html = f'<h2>Package: {header}</h2>'
     description_html = '<h2>Description:</h2>' \
@@ -88,22 +94,15 @@ def dict_to_html(dict):
 
 # TODO Unit Tests (executed when script is run stand-alone)
 if (__name__ == '__main__'):
-    # Initialize website
-    # Load and parse data that we want to serve
-    status_file = 'status.real'  # filepath to the /var/lib/dpkg/status file
-    packages_raw = fileparser.control_file_to_list(status_file)
-    packages = fileparser.clean_packages(packages_raw)    # remove unused fields and add reverse-dependency fields
-    packages = sorted(packages, key=lambda k: k['Name'])  # sort packages alphabetically
-    package_names = fileparser.get_package_names(packages)
 
     # Convert list of package names to HTML list to use on website homepage
-    packages_list_HTML = list_to_html_list(package_names, add_hyperlink=True)
-    print(packages_list_HTML)
+    packages_list_HTML = list_to_html_list(dpkg.package_names, add_hyperlink=True)
+    #print(packages_list_HTML)
 
-    for package in packages:
+    for package in dpkg.packages:
         package_html = dict_to_html(package)
         #print(package_html)
 
-    zliblg = fileparser.find_package(packages, 'zlib1g')
+    zliblg = dpkg.find_package('zlib1g')
     zliblg_html = dict_to_html(zliblg)
-    #print(zliblg_html)
+    print(zliblg_html)
