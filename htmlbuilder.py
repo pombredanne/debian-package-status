@@ -63,20 +63,26 @@ def dict_to_html(dict):
     # Pull data from dictionary
     header = dict.get('Name', '')
     description = dict.get('Description', '') # TODO: Convert \n to <br> for newlines
+    description = description.replace('\n', '<br />') # Replace newlines with HTML line break
     dependencies = dict.get('Dependencies','')
     reverse_dependencies = dict.get('Reverse-Dependencies','')
+    dependencies_html = list_to_html_list(dependencies, ordered=False)
+    reverse_dependencies_html = list_to_html_list(reverse_dependencies, ordered=False)
 
     # Build HTML page from data
     # TODO: Some dependencies aren't install on the system, so only add links to packages that exist
-    header_html = '<h1>Package: {}</h1>'.format(header)
-    description_html = '<h2>Description:</h2>' \
-                       '<p>{}</p>'.format(description)
-    dependencies_html = '<h2>Dependencies:</h2>' \
-                        '{}'.format(list_to_html_list(dependencies, ordered=False))
-    reverse_dependencies_html = '<h2>Reverse-Dependencies:</h2>' \
-                        '{}'.format(list_to_html_list(reverse_dependencies, ordered=False))
 
-    body_html = header_html + description_html + dependencies_html + reverse_dependencies_html
+    # Add html headers to data
+    home_link_html = f'<a href=\"/\"><h1>Debian Packages (/var/lib/dpkg/status)</h1></a>' # Create link to homepage
+    header_html = f'<h2>Package: {header}</h2>'
+    description_html = '<h2>Description:</h2>' \
+                       f'<p>{description}</p>'
+    dependencies_html = '<h2>Dependencies:</h2>' \
+                        f'{dependencies_html}'
+    reverse_dependencies_html = '<h2>Reverse-Dependencies:</h2>' \
+                        f'{reverse_dependencies_html}'
+
+    body_html = home_link_html + header_html + description_html + dependencies_html + reverse_dependencies_html
 
     return body_html
 
