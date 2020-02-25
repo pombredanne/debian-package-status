@@ -15,8 +15,9 @@ website where the package information can be browsed.
     * <strike> Display Description </strike> Parse description newlines
     * <strike> Display Package dependencies, ignoring versions </strike>
     * <strike> Reverse dependencies (requires building a graph) </strike>
-    * Only link dependecies that exist in the list of packages (Don't allow broken links to non-installed pacakges)
-* Improve user experience with minimal but appealing CSS
+    * <strike> Only link dependecies that exist in the list of packages (Don't allow broken links to non-installed pacakges) </strike>
+* <strike> Improve user experience with minimal but appealing CSS </strike>
+* <strike> Implement command line arguments </strike>
 * Make project easily deployable (Docker image?)
 * Deploy on webserver
 * Clean up Unit Tests for each module

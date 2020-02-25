@@ -96,14 +96,16 @@ def dict_to_html(dict):
 # TODO Unit Tests (executed when script is run stand-alone)
 if (__name__ == '__main__'):
 
+    dpkg.Dpkg() # initialize Dpkg
+
     # Convert list of package names to HTML list to use on website homepage
-    packages_list_HTML = list_to_html_list(dpkg.package_names, add_hyperlink=True)
-    #print(packages_list_HTML)
+    packages_list_HTML = list_to_html_list(dpkg.Dpkg.package_names, add_hyperlink=True)
+    print(packages_list_HTML)
 
-    for package in dpkg.packages:
+    for package in dpkg.Dpkg.packages:
         package_html = dict_to_html(package)
-        #print(package_html)
+        print(package_html)
 
-    zliblg = dpkg.find_package('zlib1g')
+    zliblg = dpkg.Dpkg.get_package_by_name('zlib1g')
     zliblg_html = dict_to_html(zliblg)
     print(zliblg_html)

@@ -1,22 +1,28 @@
 # This server module is the main module for the debian-package-status project.
-# It calls the other modules in the package and serves the returned data as a website.
+# It implements an HTTP server that hosts data from a dpkg/status file.
 
-from http.server import HTTPServer, BaseHTTPRequestHandler     # Used to create HTTP web server
-from socketserver import ThreadingMixIn
-import htmlbuilder                                             # Used to build HTML elements
-from os import path
-import dpkg                                                    # Used to access pre-parsed file data
-import argparse                                                # Used to parse command line arguments
+from http.server import HTTPServer, BaseHTTPRequestHandler  # Used to create HTTP web server
+from socketserver import ThreadingMixIn                     # Used to extend web server to handle multithreaded requests
+import argparse                                             # Used to parse command line arguments
+from os import path                                         # Used to get filepath information
+import dpkg                                                 # Used to access pre-parsed file data
+import htmlbuilder                                          # Used to build HTML elements
 
 
 def main():
     # TODO: Specify status file location when running from command line
+    # Get arguments from command line
     parser = argparse.ArgumentParser()
-    parser.add_argument('-i', '--ipaddress', help='IP address of the server (localhost by default).')
-    parser.add_argument('-p', '--port', help='Port that server should serve (80 by default).')
-    parser.add_argument('-f', '--file', help='Filepath to dpkg status file (usually /var/lib/dpkg/status). By default status.real is used')
+    parser.add_argument('-i', '--ipaddress',
+                        help='IP address of the server (localhost by default).')
+    parser.add_argument('-p', '--port', type=int,
+                        help='Port that server should serve (80 by default).')
+    parser.add_argument('-f', '--file',
+                        help='Filepath to dpkg status file (usually /var/lib/dpkg/status). '
+                             'By default status.real is used.')
     args = parser.parse_args()
 
+    # Default parameters
     ip_address = 'localhost'
     port = 80
     dpkg_status_filepath = 'status.real'
@@ -28,12 +34,12 @@ def main():
     if args.file is not None:
         dpkg_status_filepath = args.file
 
+    print(f'Initializing web server with the following parameters:')
     print(f'ip_address: {ip_address}')
     print(f'port: {port}')
     print(f'dpkg_status_filepath: {dpkg_status_filepath}')
 
-
-    package_manager = dpkg.Dpkg(dpkg_status_filepath) # Initialize data with given file
+    dpkg.Dpkg(dpkg_status_filepath) # Initialize data with given file
 
     # Start server
     #server_address = ('192.168.56.1', 80) # Woody's Wifi: '192.168.6.21' LAN: 192.168.56.1
@@ -46,59 +52,49 @@ class Serv(BaseHTTPRequestHandler):
 
     def do_GET(self):
 
-        page_data = None
+        page_data = None # Initialize response string
 
-        #print(f'self.path: {self.path}')
+        # Parse URL to know what is being requested
         url_split = self.path.split('/')
-        #print(len(url_split))
-        #print(url_split)
         filename, extension = path.splitext(self.path)
-        #print(f'filename: {filename}')
-        #print(f'extension: {extension}')
-        script_dir = path.dirname(__file__)
-        #print(f'script_dir: {script_dir}')
+        script_dir = path.dirname(__file__) # Get absolute directory where this server is being executed.
 
         # Handle requests for root page
         if self.path in ['/','/packages', '/index']:
             self.path = '/index.html'
             page_data = dpkg.Dpkg.index_html # We are at homepage
-            print(f'Sorted packages: {dpkg.Dpkg.package_names}')
             self.send_response(200)
+
 
         # Handle requests for css
         if extension == '.css':
             css_path = script_dir + self.path
-            print(css_path)
             try:
                 with open(css_path) as f:
                     self.send_response(200)                       # send_response() must be called before send_header()
                     self.send_header('Content-type', 'text/css')  # set MIME type to css
                     page_data = f.read()
-                    print(page_data)
-
 
             except IOError:
                 self.send_error(404)
 
-        # TODO: http://localhost:8080/packages/whiptail-provider does not work
 
-        # Handle requests for pages about specific dpkg packages
+        # Handle requests for webpages about specific dpkg packages
         if url_split[1] == 'packages' and len(url_split) > 2:
-            print(f'Package page requested: {self.path}')
-            print(dpkg.Dpkg.packages)
 
-            # Lookup package in list of dicts
-            package = next((item for item in dpkg.Dpkg.packages if item['Name'] == url_split[2]), None)
+            # See if requested package exists to serve
+            package_name = url_split[2]
 
-            if package == None: # package not found
+            if package_name not in dpkg.Dpkg.package_names_set: # package not found
                 page_data = None
             else: # package found
+                package = dpkg.Dpkg.get_package_by_name(package_name)
                 body_html = htmlbuilder.dict_to_html(package)
                 page_data = htmlbuilder.build_html_page(title=package['Name'], body=body_html)
                 self.send_response(200)
 
 
-        # Could not find requested page
+        # Could not process request
         if page_data == None:
             page_data = "404: File not found"
             self.send_response(404)

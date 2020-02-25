@@ -1,6 +1,9 @@
-# Dependencies can be realized as a graph data structure.
 # This module implements the necessary graph functions required to discover all
 # dependencies and reverse-dependencies.
+#
+# Dependencies can be realized as a graph data structure where the vertices are
+# packages and edges (one-directional) indicate dependence on another package.
+# A reverse-dependency can be discovered by inverting the direction of an edge in the graph.
 
 
 # Convert list of dictionaries to graph

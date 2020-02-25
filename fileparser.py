@@ -18,18 +18,17 @@ def control_file_to_list(filepath):
 
             # detect end of paragraph
             if line == '\n':
-                #print(paragraph)
                 paragraph_list.append(paragraph)  # append paragraph to list
                 paragraph = {}  # reset current paragraph
                 continue
 
-            # Multiline field if first character in line is a space or tab character
+            # Multiline field exists if first character in line is a space or tab character
             # Append line to the most recently added field in the dictionary
             if line[0] == ' ' or line[0] == '\t':
                 paragraph[key] = paragraph[key] + line
                 continue
 
-            # New field in paragraph
+            # New field in paragraph exists if we have arrived here
             key_value_list = line.split(':', 1) # split each line by first occurring ':'
             key = key_value_list[0]
             value = key_value_list[1].strip()   # remove leading whitespace from value

@@ -1,16 +1,12 @@
 # This module helps store and organize data taken from the dpkg/status file.
-# It provides a Dpkg object that who's state is shared between all instantiations.
 
 import fileparser
 import htmlbuilder
 
-# TODO: Specify status file location when running from command line
-
-# Dpkg is a singleton object that allows access to pre-parsed data from the dpkg package manager
-# Pre-parsing the dpkg/status file when the server starts instead of on
-# each HTTP GET request improves performance.
-# The server only serves one dpkg/status file at a time, so the state of Dpkg should be shared
-# between all modules and only initialized once.
+# The Dpkg class allows all modules in this project to access the pre-parsed data from the dpkg status file.
+# Dpkg can only be instantiated once and it's state is shared between all instantiations (singleton).
+# This pre-parsing increases performance by allowing all the file i/o to be done
+# when the server starts (initializing Dpkg), instead of on each HTTP GET request.
 class Dpkg:
 
     __instance = None # Keep track if Dpkg has been initialized already
@@ -57,7 +53,7 @@ class Dpkg:
 
     @classmethod
     # Finds the first package in a list of packages with the given name and returns it
-    def find_package(cls, name):
+    def get_package_by_name(cls, name):
         for dic in cls.packages:
             if dic.get('Name') == name:
                 return dic
