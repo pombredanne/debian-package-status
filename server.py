@@ -34,7 +34,7 @@ def main():
     if args.file is not None:
         dpkg_status_filepath = args.file
 
-    print(f'Initializing web server with the following parameters:')
+    print('Initializing web server with the following parameters:')
     print(f'ip_address: {ip_address}')
     print(f'port: {port}')
     print(f'dpkg_status_filepath: {dpkg_status_filepath}')
@@ -42,9 +42,7 @@ def main():
     dpkg.Dpkg(dpkg_status_filepath) # Initialize data with given file
 
     # Start server
-    #server_address = ('192.168.56.1', 80) # Woody's Wifi: '192.168.6.21' LAN: 192.168.56.1
     server_address = (ip_address, port)
-    #httpd = HTTPServer(server_address, Serv) # Single Threaded Server
     httpd = ThreadedHTTPServer(server_address, Serv) # Multi Threaded Server
     httpd.serve_forever()
 
