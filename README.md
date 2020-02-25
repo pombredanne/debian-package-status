@@ -5,6 +5,8 @@ Debian software packages.
 It pulls package information from /var/lib/dpkg/status and serves up a 
 website where the package information can be browsed.
 
+It contains no external dependencies and only relies on native Python 3.7 modules.
+
 ## TO-DO
 
 * <strike> Build Python web server </strike>
