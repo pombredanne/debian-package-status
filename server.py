@@ -4,10 +4,10 @@
 from http.server import HTTPServer, BaseHTTPRequestHandler  # Used to create HTTP web server
 from socketserver import ThreadingMixIn                     # Used to extend web server to handle multithreaded requests
 import argparse                                             # Used to parse command line arguments
-from os import path                                         # Used to get filepath information
+import os                                                   # Used to get filepath information
 import dpkg                                                 # Used to access pre-parsed file data
 import htmlbuilder                                          # Used to build HTML elements
-
+import sys                                                  # Used to handle keyboard interrupts
 
 def main():
     # TODO: Specify status file location when running from command line
@@ -56,8 +56,8 @@ class Serv(BaseHTTPRequestHandler):
 
         # Parse URL to know what is being requested
         url_split = self.path.split('/')
-        filename, extension = path.splitext(self.path)
-        script_dir = path.dirname(__file__) # Get absolute directory where this server is being executed.
+        filename, extension = os.path.splitext(self.path)
+        script_dir = os.path.dirname(__file__) # Get absolute directory where this server is being executed.
 
         # Handle requests for root page
         if self.path in ['/','/packages', '/index']:
@@ -109,4 +109,12 @@ class ThreadedHTTPServer(ThreadingMixIn, HTTPServer):
 
 
 if __name__ == "__main__":
-    main() # get command line arguments
+    try:
+        main() # get command line arguments
+    except KeyboardInterrupt: # Gracefully exit program when keyboard interrupt is given (Ctrl-C)
+        print('Server interrupted')
+        try:
+            sys.exit(0)
+        except SystemExit:
+            os._exit(0)
+
