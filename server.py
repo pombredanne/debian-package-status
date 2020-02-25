@@ -10,7 +10,7 @@ import htmlbuilder                                          # Used to build HTML
 import sys                                                  # Used to handle keyboard interrupts
 
 def main():
-    # TODO: Specify status file location when running from command line
+
     # Get arguments from command line
     parser = argparse.ArgumentParser()
     parser.add_argument('-i', '--ipaddress',

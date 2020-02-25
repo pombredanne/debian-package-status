@@ -93,7 +93,7 @@ def dict_to_html(dict):
     return body_html
 
 
-# TODO Unit Tests (executed when script is run stand-alone)
+# Unit Tests (executed when script is run stand-alone)
 if (__name__ == '__main__'):
 
     dpkg.Dpkg() # initialize Dpkg
