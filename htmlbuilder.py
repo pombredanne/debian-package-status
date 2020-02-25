@@ -1,4 +1,7 @@
-import dpkg      # Used to access global set of packages installed on system
+# This module helps convert Dpkg data into HTML strings
+# that can be sent by the server to clients' web browsers.
+
+import dpkg      # Used to access pre-parsed Dpkg data
 
 # This function builds a complete HTML Page using the provided title and body parameters
 # The title and body parameters should be appropriately formatted HTML strings
@@ -29,7 +32,6 @@ def build_html_page(title='', body='', h1='', css_path='/css/styles.css'):
     return pageHTML
 
 # Converts a list of strings to an HTML list
-# TODO: If using package name in url, test that package adheres to url syntax.
 def list_to_html_list(package_list, add_hyperlink=True, ordered=True):
 
     list_html = ''
@@ -44,7 +46,7 @@ def list_to_html_list(package_list, add_hyperlink=True, ordered=True):
         # Add hyperlink to list item
         # Only link reverse-dependencies and dependencies that exist in packages
         # For example: plymouth package has dependency upstart-job that isn't listed in status.real dpkg/status file
-        if add_hyperlink and package_name in dpkg.package_names_set:
+        if add_hyperlink and package_name in dpkg.Dpkg.package_names_set:
             url = f'/packages/{package_name}'
             list_item = f'<a href=\"{url}\">{list_item}</a>'
 

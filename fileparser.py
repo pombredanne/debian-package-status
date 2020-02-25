@@ -1,3 +1,6 @@
+# This module handles the file i/o and conversion of the dpkg/status file
+# into Python data structures.
+
 import graph
 
 # Convert Debian control file to a list of dictionaries
@@ -64,12 +67,4 @@ def clean_packages(packages_raw):
     return packages
 
 
-# Returns a list of package names from a given dictionary
-def get_package_names(packages):
-    package_names = []
 
-    for dic in packages:
-        package_name = dic.get('Name', '')
-        package_names.append(package_name)
-
-    return package_names

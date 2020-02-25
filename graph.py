@@ -1,5 +1,6 @@
-# Package dependencies can be viewed as a graph
-# This module implements useful graph functions
+# Dependencies can be realized as a graph data structure.
+# This module implements the necessary graph functions required to discover all
+# dependencies and reverse-dependencies.
 
 
 # Convert list of dictionaries to graph
