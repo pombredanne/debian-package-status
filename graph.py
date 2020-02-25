@@ -12,7 +12,12 @@ def list_of_dicts_to_graph(list_of_dicts, remove_version_number = True):
 
     for dic in list_of_dicts:
         package_name = dic.get('Package', '')
-        dependencies = dic.get('Depends','').split(', ')
+
+        # Get dependency field as a string and convert to list
+        # Treat alternate dependencies (denoted by pipe '|' ) as dependency
+        dependencies_str = dic.get('Depends', '')
+        dependencies_str = dependencies_str.replace(' | ', ', ')
+        dependencies = dependencies_str.split(', ')
 
         if remove_version_number == True:
             # Remove version from dependencies
@@ -22,7 +27,7 @@ def list_of_dicts_to_graph(list_of_dicts, remove_version_number = True):
                 dependency = item.split(' ')[0]
                 temp_dependencies.append(dependency)
             dependencies = temp_dependencies
-        dependencies = set(dependencies) # Remove duplicates by temporarily converting list to set
+        dependencies = set(dependencies) # Remove duplicates by converting list to set
 
         graph[package_name] = dependencies
 
