@@ -52,6 +52,27 @@ optional arguments:
                         /var/lib/dpkg/status). By default status.real is used.
 ```
 
+## Deploymenton Heroku
+Heroku is a container-based cloud Platform as a Service (Paas). They provide a free tier that allows users 550 free 'dyno' hours per month (1000 if credit card verified). When the server does not receive traffic for 30 minutes, the process will go to 'sleep' which will save 'dyno' hours. It will then take 5-10 seconds to 'wake' the server when a new request is received.
+
+To deploy the web server on Heroku, first create a Heroku account https://signup.heroku.com/.
+
+[Install Heroku command line interface (CLI)](https://devcenter.heroku.com/articles/heroku-cli#download-and-install]).
+
+Login to Heroku from command line
+```
+$ heroku login
+```
+
+Navigate to the root of the debian-package-status project and [create a heroku app](https://devcenter.heroku.com/articles/creating-apps). A random name will be given to the app if one is not specified (you can always [rename the app later](https://devcenter.heroku.com/articles/renaming-apps)).
+```
+$ heroku create
+Creating app... done, ⬢ warm-earth-66720
+https://warm-earth-66720.herokuapp.com/ | https://git.heroku.com/warm-earth-66720.git
+```
+
+
+
 ## TO-DO
 
 * <strike> Build Python web server </strike>
