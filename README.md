@@ -19,12 +19,6 @@ You can check your installed Python version with:
 $ python --version
 ```
 
-If Python is not installed you can download it from https://www.python.org/downloads/ or use the following command on linux:
-```
-$ sudo apt-get update
-$ sudo apt-get install python3.6
-```
-
 ### Running the server (localhost)
 You can run the server locally by executing server.py. By default, the server executes on localhost port 80 and serves the included status.real dpkg/status file.
 ```
