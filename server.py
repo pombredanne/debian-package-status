@@ -66,7 +66,7 @@ class Serv(BaseHTTPRequestHandler):
 
         # Handle requests for css
         if extension == '.css':
-            css_path = script_dir + self.path
+            css_path = 'css/styles.css'
             try:
                 with open(css_path) as f:
                     self.send_response(200)                       # send_response() must be called before send_header()
