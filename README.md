@@ -5,7 +5,9 @@ Debian/Ubuntu software packages.
 It pulls package information from /var/lib/dpkg/status and serves up a 
 website where the package information can be browsed.
 
-It contains no external dependencies and only relies on native Python 3.7 modules.
+It contains no external dependencies and only relies on native Python 3.6 modules.
+
+An example is currently hosted on Heroku: https://warm-earth-66720.herokuapp.com/
 
 ## Getting Started
 
@@ -41,7 +43,7 @@ You can run the server on the local network by specifying 0.0.0.0 as the IP addr
 $ python server.py -i 0.0.0.0 -p 80
 ```
 
-Hint: You can check your computer's ip address with ```$ ipconfig``` on Windows or ```$ ifconfig``` on Linux.
+Hint: You can check your computer's IP address with ```$ ipconfig``` on Windows or ```$ ifconfig``` on Linux.
 
 ## Getting Help
 You can see the available command line options by providing the --help flag to the server.
