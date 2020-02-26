@@ -10,3 +10,8 @@ ul {
 ol {
     list-style-position: inside;
 }
+
+/* mouse over link */
+a:hover {
+  color: hotpink;
+}
