@@ -5,7 +5,7 @@ Debian/Ubuntu software packages.
 It pulls package information from /var/lib/dpkg/status and serves up a 
 website where the package information can be browsed.
 
-It contains no external dependencies and only relies on native Python 3.6 modules.
+It contains no external dependencies and only relies on the Python 3.6 Standard Library.
 
 An example is currently hosted on Heroku: https://warm-earth-66720.herokuapp.com/
 
@@ -52,7 +52,7 @@ optional arguments:
                         /var/lib/dpkg/status). By default status.real is used.
 ```
 
-## Deploymenton Heroku
+## Deployment on Heroku
 Heroku is a container-based cloud Platform as a Service (Paas). They provide a free tier that allows users 550 free 'dyno' hours per month (1000 if credit card verified). When the server does not receive traffic for 30 minutes, the process will go to 'sleep' which will save 'dyno' hours. It will then take 5-10 seconds to 'wake' the server when a new request is received.
 
 To deploy the web server on Heroku, first create a Heroku account https://signup.heroku.com/.
@@ -71,6 +71,40 @@ Creating app... done, ⬢ warm-earth-66720
 https://warm-earth-66720.herokuapp.com/ | https://git.heroku.com/warm-earth-66720.git
 ```
 
+You can make changes to the source code and push the changes to Heroku using git.
+```
+$ git push heroku master
+Counting objects: 4, done.
+Delta compression using up to 4 threads.
+Compressing objects: 100% (3/3), done.
+Writing objects: 100% (4/4), 402 bytes | 402.00 KiB/s, done.
+Total 4 (delta 2), reused 0 (delta 0)
+remote: Compressing source files... done.
+remote: Building source:
+remote:
+remote: -----> Python app detected
+remote: -----> Need to update SQLite3, clearing cache
+remote: -----> Installing python-3.6.10
+remote: -----> Installing pip
+remote: -----> Installing SQLite3
+remote: Sqlite3 successfully installed.
+remote: -----> Installing requirements with pip
+remote:
+remote: -----> Discovering process types
+remote:        Procfile declares types -> web
+remote:
+remote: -----> Compressing...
+remote:        Done: 44M
+remote: -----> Launching...
+remote:        Released v5
+remote:        https://warm-earth-66720.herokuapp.com/ deployed to Heroku
+remote:
+remote: Verifying deploy... done.
+To https://git.heroku.com/warm-earth-66720.git
+   ef0edd2..a35d740  master -> master
+```
+
+Note: Heroku uses the ```Procfile``` to know which script to execute and what parameters to pass. The Heroku app environment has ```$PORT``` environment variable which should be passed into server.py. ```requirments.txt``` is empy because there are no dependencies for this project, but the file must still exist so that Heroku recognizes the app as a Python app.
 
 
 ## TO-DO
