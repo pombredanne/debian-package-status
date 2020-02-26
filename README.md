@@ -7,7 +7,7 @@ website where the package information can be browsed.
 
 It contains no external dependencies and only relies on the Python 3.6 Standard Library.
 
-An example is currently hosted on Heroku: https://warm-earth-66720.herokuapp.com/
+An example is currently hosted on Heroku: https://debian-package-status.herokuapp.com/
 
 ## Getting Started
 
